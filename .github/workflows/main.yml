@@ -1,0 +1,26 @@
+name: Run bums.js Workflow
+
+on:
+  # Run at 5 minutes past every 6th hour (00:05, 06:05, 12:05, 18:05)
+  schedule:
+    - cron: '5 0,6,12,18 * * *'
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  run_bums_js:
+    runs-on: ubuntu-latest
+    # Timeout the job after 6 hours (360 minutes)
+    timeout-minutes: 360
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install NodeJS LTS
+        run: sudo pkg install nodejs-lts
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Run bums.js
+        run: node bums.js
