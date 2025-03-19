@@ -10,13 +10,19 @@ on:
 jobs:
   run_bums_js:
     runs-on: ubuntu-latest
-    # Timeout the job after 6 hours (360 minutes)
     timeout-minutes: 360
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install NodeJS LTS
+      - name: Create missing userAgents file if not exists
+        run: |
+          mkdir -p config
+          if [ ! -f config/userAgents.js ]; then
+            echo "module.exports = [];" > config/userAgents.js
+          fi
+
+      - name: Install Node.js LTS
         run: |
           curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
           sudo apt install -y nodejs
